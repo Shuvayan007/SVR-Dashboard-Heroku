@@ -169,7 +169,7 @@ if st.sidebar.button("Run Algorithm"):
         ax.set_xlabel("Feature")
         ax.set_ylabel("Target")
 
-        plot_placeholder.pyplot(fig)
+        plot_placeholder.pyplot(fig, use_container_width=False)
 
         mae = mean_absolute_error(y_test, y_pred)
 
