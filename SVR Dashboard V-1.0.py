@@ -20,7 +20,7 @@ st.set_page_config(page_title="SVR Dashboard", page_icon="📈", layout="wide")
 @st.cache_data
 def load_data():
     X, y = load_diabetes(return_X_y=True)
-    X = X[:, 9].reshape(-1, 1)   # Use feature 9
+    X = X[:, 9].reshape(442,1)   # Use feature 9
     return train_test_split(X, y, test_size=0.2, random_state=42)
 
 
@@ -157,7 +157,7 @@ if st.sidebar.button("Run Algorithm"):
             X_plot.min(),
             X_plot.max(),
             500
-        ).reshape(-1, 1)
+        ).reshape(442,1)
 
         y_line = model.predict(x_line)
 
