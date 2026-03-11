@@ -1,10 +1,10 @@
-# 🚀 Gradient Boosting Interactive Dashboard
+# 🚀 Support Vector Regression (SVR) Interactive Dashboard
 
-![Visitor Count](https://komarev.com/ghpvc/?username=shuvayan007&repo=gb-dashboard-heroku&color=blue)
+![Visitor Count](https://komarev.com/ghpvc/?username=shuvayan007&repo=SVR-Dashboard-Heroku&color=blue)
 
-An **interactive machine learning dashboard** built with **Streamlit** that allows users to experiment with **Gradient Boosting hyperparameters** and visualize how they affect model performance on **2D datasets**.
+An **interactive machine learning dashboard** built with **Streamlit** that allows users to experiment with **Support Vector Regression (SVR) hyperparameters** and visualize how they affect model performance on **2D datasets**.
 
-This project is designed to help **students, ML practitioners, and aspiring data scientists** understand the behavior of Gradient Boosting in an intuitive and visual way.
+This project is designed to help **students, ML practitioners, and aspiring data scientists** understand the behavior of **Support Vector Machines in regression tasks** in an intuitive and visual way.
 
 ---
 
@@ -12,19 +12,21 @@ This project is designed to help **students, ML practitioners, and aspiring data
 
 🔗 **Try the Dashboard:**  
 
-[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://gb-dashboard-v3.streamlit.app/)
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://svr-dashboard.streamlit.app/)
 
 ---
 
 ## 🧠 Project Overview
 
-Gradient Boosting is one of the most powerful ensemble learning algorithms used in machine learning. However, understanding how different hyperparameters affect its performance can be challenging.
+**Support Vector Regression (SVR)** is a powerful machine learning algorithm derived from **Support Vector Machines (SVM)** that is widely used for regression tasks.
+
+However, understanding how different **kernel functions and hyperparameters influence the regression curve** can be challenging.
 
 This dashboard provides an **interactive learning environment** where users can:
 
-- Adjust Gradient Boosting hyperparameters
+- Adjust SVR hyperparameters
 - Train the model instantly
-- Visualize decision boundaries
+- Visualize regression curves
 - Observe performance changes in real-time
 
 All through an **easy-to-use graphical interface**.
@@ -35,28 +37,26 @@ All through an **easy-to-use graphical interface**.
 
 ✅ Interactive **Streamlit Dashboard**  
 ✅ **Real-time model training** after parameter tuning  
-✅ **Visual decision boundary plotting** on 2D datasets  
-✅ Adjustable **Gradient Boosting hyperparameters**  
+✅ **Regression curve visualization** on 2D datasets  
+✅ Adjustable **SVR hyperparameters**  
 ✅ Performance metrics display  
-✅ Educational tool for understanding **ensemble learning**
+✅ Educational tool for understanding **Support Vector Machines**
 
 ---
 
 ## ⚙️ Adjustable Hyperparameters
 
-The dashboard allows users to modify key Gradient Boosting parameters from the **sidebar (hamburger panel)**:
+The dashboard allows users to modify key **SVR parameters** from the **sidebar (hamburger panel)**:
 
 | Parameter | Description |
 |----------|-------------|
-| `n_estimators` | Number of boosting stages |
-| `learning_rate` | Shrinks the contribution of each tree |
-| `max_depth` | Maximum depth of individual trees |
-| `min_samples_split` | Minimum samples required to split a node |
-| `min_samples_leaf` | Minimum samples required at a leaf node |
-| `subsample` | Fraction of samples used for training |
-| `random_state` | Controls randomness for reproducibility |
+| `kernel` | Kernel type (linear, poly, rbf, sigmoid) |
+| `C` | Regularization parameter controlling model complexity |
+| `epsilon` | Defines the epsilon-tube within which no penalty is associated |
+| `gamma` | Kernel coefficient for non-linear kernels |
+| `degree` | Degree of polynomial kernel (if poly kernel is used) |
 
-Users can experiment with these parameters to observe **how the model adapts to the dataset**.
+Users can experiment with these parameters to observe **how the regression model adapts to the dataset**.
 
 ---
 
@@ -64,9 +64,9 @@ Users can experiment with these parameters to observe **how the model adapts to 
 
 The dashboard visualizes:
 
-- Decision boundaries of the trained model
+- Regression curve of the trained model
 - Data distribution in 2D
-- Classification regions
+- Prediction results
 - Model performance metrics
 
 This makes the algorithm's learning process **easy to understand visually**.
@@ -87,14 +87,14 @@ This makes the algorithm's learning process **easy to understand visually**.
 ## 📁 Project Structure
 
 ```
-Gradient-Boosting-Dashboard
+SVR-Dashboard-Heroku
 │
-├── app.py # Streamlit application
-├── requirements.txt # Project dependencies
-├── README.md # Project documentation
+├── app.py                 # Streamlit application
+├── requirements.txt       # Project dependencies
+├── README.md              # Project documentation
 │
 └── assets
-└── dashboard_preview.png
+    └── dashboard_preview.png
 ```
 
 ---
@@ -104,89 +104,82 @@ Gradient-Boosting-Dashboard
 Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/gradient-boosting-dashboard.git
+git clone https://github.com/shuvayan007/SVR-Dashboard-Heroku.git
 ```
-Gradient-Boosting-Dashboard│├── app.py # Streamlit application
 
 Navigate to the project directory:
 
 ```bash
-cd gradient-boosting-dashboard
+cd SVR-Dashboard-Heroku
 ```
 
 Install dependencies:
 
-```bash   
+```bash
 pip install -r requirements.txt
 ```
 
 Run the Streamlit app:
 
-```bash   
+```bash
 streamlit run app.py
 ```
 
-🎯 Use Cases
-------------
+---
 
-*   Machine Learning **education**
-    
-*   Understanding **ensemble learning**
-    
-*   Demonstrating **hyperparameter tuning**
-    
-*   Interactive **ML teaching tools**
-    
-*   Portfolio project for **data science learners**
-    
+## 🎯 Use Cases
 
-📸 Dashboard Preview
---------------------
+- Machine Learning **education**
+- Understanding **Support Vector Machines**
+- Demonstrating **hyperparameter tuning**
+- Interactive **ML teaching tools**
+- Portfolio project for **data science learners**
 
+---
 
-<img width="1919" height="827" alt="dashboard_preview" src="https://github.com/user-attachments/assets/3429c32d-5c82-44ae-8882-dbb21388d709" />
+## 📸 Dashboard Preview
 
+<img width="1920" height="1043" alt="image" src="https://github.com/user-attachments/assets/bd44d2f2-52ca-489d-9e4f-639ba1ac20cb" />
 
-💡 Future Improvements
-----------------------
+---
 
-*   Add support for **XGBoost and LightGBM**
-    
-*   Add **multiple dataset selection**
-    
-*   Add **3D dataset visualization**
-    
-*   Add **training time comparison**
-    
-*   Add **model performance leaderboard**
-    
+## 💡 Future Improvements
 
-🤝 Contributing
----------------
+- Add support for **Kernel comparison visualization**
+- Add **multiple dataset selection**
+- Add **3D regression visualization**
+- Add **training time comparison**
+- Add **model evaluation dashboard**
+
+---
+
+## 🤝 Contributing
 
 Contributions are welcome!
 
 If you'd like to improve this project:
 
-1.  Fork the repository
-    
-2.  Create a feature branch
-    
-3.  Submit a pull request
-    
+1. Fork the repository  
+2. Create a feature branch  
+3. Submit a pull request  
 
-📜 License
-----------
+---
+
+## 📜 License
 
 This project is licensed under the **MIT License**.
 
-👨‍💻 Author
-------------
+---
+
+## 👨‍💻 Author
 
 **Shuvayan Pal**
 
 Data Scientist | AI Engineer | Machine Learning Enthusiast
 
-*   💼 LinkedIn
-    
-*   🧠 Passionate about **AI, Machine Learning, and building intelligent systems**
+💼 LinkedIn  
+🧠 Passionate about **AI, Machine Learning, and building intelligent systems**
+
+---
+
+⭐ If you found this project useful, please consider **starring the repository**!
