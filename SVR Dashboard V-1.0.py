@@ -1,123 +1,180 @@
-import pandas as pd
 import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
+
 from sklearn.datasets import load_diabetes
 from sklearn.model_selection import train_test_split
 from sklearn.svm import SVR
 from sklearn.metrics import mean_absolute_error
 
-st.set_page_config(page_icon='📈')
 
-X,y=load_diabetes(return_X_y=True)
-df=pd.DataFrame(X)
-df['target']=y
-X=df[9].values.reshape(442,1)
-y=df['target'].values
-X_train,X_test,y_train,y_test=train_test_split(X,y)
+# -----------------------------
+# PAGE CONFIG
+# -----------------------------
+st.set_page_config(page_title="SVR Dashboard", page_icon="📈", layout="wide")
 
 
-st.sidebar.markdown("# Support Vector Regression Dashboard")
+# -----------------------------
+# DATA LOADING
+# -----------------------------
+@st.cache_data
+def load_data():
+    X, y = load_diabetes(return_X_y=True)
+    X = X[:, 9].reshape(-1, 1)   # Use feature 9
+    return train_test_split(X, y, test_size=0.2, random_state=42)
 
-tuning=st.sidebar.radio(
-    'Hyper Parameter',
-    ('Default Value','Tuning')
+
+X_train, X_test, y_train, y_test = load_data()
+
+
+# -----------------------------
+# SIDEBAR UI
+# -----------------------------
+st.sidebar.title("Support Vector Regression")
+
+mode = st.sidebar.radio(
+    "Hyperparameter Mode",
+    ["Default", "Custom Tuning"]
 )
-if tuning=='Tuning':
-    st.sidebar.info('Initially, all parameter values are set to default. Change them according to your need.:smiley:')
-    kernel=st.sidebar.selectbox(
-        'Kernel Type (Precomputed!!)',
-        ('rbf','linear','poly','sigmoid','precomputed')
+
+# Default parameters
+params = {
+    "kernel": "rbf",
+    "degree": 3,
+    "gamma": "scale",
+    "coef0": 0.0,
+    "tol": 0.001,
+    "C": 1.0,
+    "epsilon": 0.1,
+    "shrinking": True,
+    "cache_size": 200,
+    "verbose": False,
+    "max_iter": -1
+}
+
+
+# -----------------------------
+# TUNING PANEL
+# -----------------------------
+if mode == "Custom Tuning":
+
+    st.sidebar.info(
+        "All parameters start with default values. Adjust them as needed."
     )
 
-    if kernel=='poly':
-        degree=st.sidebar.slider('Degree of the polynomial',value=3, max_value=10)
-    else:
-        degree=0
+    params["kernel"] = st.sidebar.selectbox(
+        "Kernel",
+        ["rbf", "linear", "poly", "sigmoid"]
+    )
 
-    if kernel=='rbf' or kernel=='poly' or kernel=='sigmoid':
-        gamma = st.sidebar.selectbox(
-            'Gamma',
-            ('scale', 'auto', 'float')
+    if params["kernel"] == "poly":
+        params["degree"] = st.sidebar.slider("Polynomial Degree", 2, 10, 3)
+
+    if params["kernel"] in ["rbf", "poly", "sigmoid"]:
+        gamma_option = st.sidebar.selectbox(
+            "Gamma",
+            ["scale", "auto", "custom"]
         )
 
-        if gamma=='float':
-            gamma=st.sidebar.number_input('Gamma Value',value=0.01)
-    else:
-        gamma='scale'
-
-    if kernel=='poly' or kernel=='sigmoid':
-        coef0=st.sidebar.number_input('Coefficient 0')
-    else:
-        coef0=0.0
-
-    tol=st.sidebar.number_input('Tolerance',value=0.001,format="%.3f",min_value=0.001,step=0.001)
-
-    C=st.sidebar.number_input('C (Regularization Parameter)',min_value=0.01,value=1.0)
-
-    epsilon=st.sidebar.number_input('Epsilon Value',min_value=0.00 ,value=0.1)
-
-    shrinking=st.sidebar.selectbox(
-        'Shrinking',
-        ('True','False')
-    )
-
-    if shrinking=='True':
-        shrinking=True
-    else:
-        shrinking=False
-
-    with st.sidebar.beta_expander('Tips 💡'):
-        # Add user input widgets to the side bar
-        st.info(':bulb: If the number of iterations is large, then shrinking can shorten the training time. However, if we loosely solve the optimization problem (e.g., by using a large stopping tolerance), the code without using shrinking may be much faster.')
-
-    cache_size=st.sidebar.number_input('Cache Size (In MB)',value=200,min_value=1,step=1)
-
-    verbose=st.sidebar.selectbox(
-        'Verbose (Catch output)',
-        ('False','True')
-    )
-    if verbose=='True':
-        verbose=True
-    else:
-        verbose=False
-
-    max_iter=st.sidebar.slider('Maximum Iteration',value=-1,max_value=500,min_value=-1)
-
-    clf=SVR(kernel,degree,gamma,coef0,tol,C,epsilon,shrinking,cache_size,verbose,max_iter)
-else:
-    clf=SVR()
-
-
-fig,ax=plt.subplots()
-
-ax.scatter(X,y)
-orig=st.pyplot(fig)
-
-
-if st.sidebar.button('Run Algorithm'):
-    with st.spinner('Your model is getting trained..:muscle:'):
-        orig.empty()
-
-        x = np.linspace(X.min(), X.max(), X.shape[0]).reshape(X.shape)
-
-        if kernel=='precomputed':
-            X_test = np.dot(X_test, X_train.T)
-            X_train1=np.linspace(X_train.min(),X_train.max(),X_train.shape[0]).reshape(X_train.shape)
-            x = np.dot(x, X_train1.T)
-            # print(X_train)
-            X_train=np.dot(X_train, X_train.T)
-            # print(X_train)
+        if gamma_option == "custom":
+            params["gamma"] = st.sidebar.number_input(
+                "Gamma Value", value=0.01
+            )
         else:
-            pass
-        # print(X_train.shape,X_test.shape)
-        clf.fit(X_train,y_train)
-        y_pred=clf.predict(X_test)
+            params["gamma"] = gamma_option
 
-        ax.plot(x, clf.predict(x), color='red')
+    if params["kernel"] in ["poly", "sigmoid"]:
+        params["coef0"] = st.sidebar.number_input("coef0", value=0.0)
 
-        plt.xlabel('Col1')
-        plt.ylabel('Col2')
-        orig=st.pyplot(fig)
-        st.sidebar.subheader("Mean absolute error of the model: "+str(round(mean_absolute_error(y_test,y_pred),2)))
-    st.success("Done!")
+    params["tol"] = st.sidebar.number_input(
+        "Tolerance", value=0.001, step=0.001
+    )
+
+    params["C"] = st.sidebar.number_input(
+        "Regularization (C)", min_value=0.01, value=1.0
+    )
+
+    params["epsilon"] = st.sidebar.number_input(
+        "Epsilon", min_value=0.0, value=0.1
+    )
+
+    params["shrinking"] = st.sidebar.selectbox(
+        "Shrinking", [True, False]
+    )
+
+    params["cache_size"] = st.sidebar.number_input(
+        "Cache Size (MB)", value=200
+    )
+
+    params["verbose"] = st.sidebar.selectbox(
+        "Verbose Output", [True, False]
+    )
+
+    params["max_iter"] = st.sidebar.slider(
+        "Max Iterations", -1, 500, -1
+    )
+
+    with st.sidebar.expander("Tips 💡"):
+        st.info(
+            "Shrinking may speed up training for large iteration counts. "
+            "If tolerance is large, disabling shrinking may be faster."
+        )
+
+
+# -----------------------------
+# MODEL
+# -----------------------------
+model = SVR(**params)
+
+
+# -----------------------------
+# INITIAL PLOT
+# -----------------------------
+fig, ax = plt.subplots()
+
+X_plot = np.concatenate([X_train, X_test])
+y_plot = np.concatenate([y_train, y_test])
+
+ax.scatter(X_plot, y_plot)
+ax.set_xlabel("Feature")
+ax.set_ylabel("Target")
+
+plot_placeholder = st.pyplot(fig)
+
+
+# -----------------------------
+# TRAIN BUTTON
+# -----------------------------
+if st.sidebar.button("Run Algorithm"):
+
+    with st.spinner("Training SVR model..."):
+
+        model.fit(X_train, y_train)
+
+        y_pred = model.predict(X_test)
+
+        x_line = np.linspace(
+            X_plot.min(),
+            X_plot.max(),
+            500
+        ).reshape(-1, 1)
+
+        y_line = model.predict(x_line)
+
+        fig, ax = plt.subplots()
+
+        ax.scatter(X_plot, y_plot)
+        ax.plot(x_line, y_line)
+
+        ax.set_xlabel("Feature")
+        ax.set_ylabel("Target")
+
+        plot_placeholder.pyplot(fig)
+
+        mae = mean_absolute_error(y_test, y_pred)
+
+        st.sidebar.success(
+            f"Mean Absolute Error: {mae:.2f}"
+        )
+
+    st.success("Training Complete!")
