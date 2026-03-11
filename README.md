@@ -12,7 +12,7 @@ This project is designed to help **students, ML practitioners, and aspiring data
 
 🔗 **Try the Dashboard:**  
 
-https://gb-dashboard-v3.streamlit.app/
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)]([https://your-xgb-dashboard.streamlit.app/](https://gb-dashboard-v3.streamlit.app/))
 
 ---
 
