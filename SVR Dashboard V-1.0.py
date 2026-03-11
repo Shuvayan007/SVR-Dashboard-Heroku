@@ -108,6 +108,8 @@ if st.sidebar.button('Run Algorithm'):
             # print(X_train)
             X_train=np.dot(X_train, X_train.T)
             # print(X_train)
+        else:
+            pass
         # print(X_train.shape,X_test.shape)
         clf.fit(X_train,y_train)
         y_pred=clf.predict(X_test)
