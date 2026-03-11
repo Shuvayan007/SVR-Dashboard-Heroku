@@ -143,7 +143,9 @@ streamlit run app.py
 📸 Dashboard Preview
 --------------------
 
+
 <img width="1919" height="827" alt="dashboard_preview" src="https://github.com/user-attachments/assets/3429c32d-5c82-44ae-8882-dbb21388d709" />
+
 
 💡 Future Improvements
 ----------------------
